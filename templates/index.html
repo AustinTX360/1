@@ -10,8 +10,20 @@
     <div class="container mt-5">
         <h1 class="display-4">Welcome to Nodal Market!</h1>
         <p class="lead">This is a simple Flask app deployed on Azure.</p>
+        <img src="{{ url_for('static', filename='your_image.jpg') }}" class="img-fluid" alt="Your Image">
         <hr class="my-4">
-        <p>Thanks for visiting!</p>
+        <h2>Contact Us</h2>
+        <form action="{{ url_for('submit_form') }}" method="post">
+            <div class="mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

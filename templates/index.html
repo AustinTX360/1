@@ -4,43 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <title>Nodal Market</title>
+    <title>Your Azure Flask App</title>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Nodal Market</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mt-5">
-        <h1 class="display-4">We Provide Energy Solutions</h1>
+        <h1 class="display-4">Welcome to Nodal Market!</h1>
         <p class="lead">This is a simple Flask app deployed on Azure.</p>
         <img src="{{ url_for('static', filename='your_image.jpg') }}" class="img-fluid" alt="Your Image">
         <hr class="my-4">
         
-        <h2>Contact Us</h2>
-        <form action="{{ url_for('submit_form') }}" method="post">
-            <div class="mb-3">
-                <label for="name" class="form-label">Your Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Your Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="mb-3">
-                <label for="subject" class="form-label">Subject</label>
-                <select class="form-select" id="subject" name="subject" required>
-                    <option value="" disabled selected>Select a subject</option>
-                    <option value="general">General Inquiry</option>
-                    <option value="support">Technical Support</option>
-                    <option value="feedback">Feedback</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        <!-- Home Content -->
+
+        <div id="about" class="mt-5">
+            <h2>About Us</h2>
+            <p>This is the about us section. You can provide information about your company or project here.</p>
+        </div>
 
         <hr class="my-4">
 
-        <h2>Solutions</h2>
-        <h3>This is a Subheadline</h3>
-        <p>This is some text under the subheadline. You can add more paragraphs, lists, or any other HTML elements as needed.</p>
+        <div id="products" class="mt-5">
+            <h2>Products</h2>
+            <p>This is the products section. You can list your products or showcase them in this area.</p>
+        </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

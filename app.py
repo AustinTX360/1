@@ -15,10 +15,11 @@ def is_admin():
 # Home route
 @app.route('/')
 def home():
-    # Capture visitor information
+    # Capture visitor information, including the correct IP address
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     visitor_info = {
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'ip_address': request.remote_addr,
+        'ip_address': client_ip,
         'user_agent': request.user_agent.string
     }
     visitors.append(visitor_info)

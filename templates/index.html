@@ -8,12 +8,12 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="display-4">Welcome to Nodal Market!</h1>
-        <p class="lead">We provide the best energy solutions for homes and companies.</p>
+        <h1 class="display-4">We Provide Energy Solutions</h1>
+        <p class="lead">This is a simple Flask app deployed on Azure.</p>
         <img src="{{ url_for('static', filename='your_image.jpg') }}" class="img-fluid" alt="Your Image">
         <hr class="my-4">
         
-        <h2>If you want any help please feel free to contact Us</h2>
+        <h2>Contact Us</h2>
         <form action="{{ url_for('submit_form') }}" method="post">
             <div class="mb-3">
                 <label for="name" class="form-label">Your Name</label>
@@ -37,7 +37,7 @@
 
         <hr class="my-4">
 
-        <h2>Headline Section</h2>
+        <h2>Solutions</h2>
         <h3>This is a Subheadline</h3>
         <p>This is some text under the subheadline. You can add more paragraphs, lists, or any other HTML elements as needed.</p>
     </div>

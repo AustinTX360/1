@@ -5,8 +5,9 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
 
-# Data structure to store visitor information
-visitors = []
+# Data structures to store visitor information
+all_visitors = []
+question_submissions = []
 
 # Function to check if the user is logged in as an admin
 def is_admin():
@@ -15,14 +16,14 @@ def is_admin():
 # Home route
 @app.route('/')
 def home():
-    # Capture visitor information, including the correct IP address
+    # Capture visitor information
     client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     visitor_info = {
         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
         'ip_address': client_ip,
         'user_agent': request.user_agent.string
     }
-    visitors.append(visitor_info)
+    all_visitors.append(visitor_info)
 
     return render_template('index.html')
 
@@ -32,21 +33,29 @@ def submit_form():
     name = request.form.get('name')
     email = request.form.get('email')
     subject = request.form.get('subject')
-    
-    # Process the form data (you can add your own logic here)
-    
-    return f'Thank you, {name}! Your email ({email}) regarding "{subject}" has been submitted.'
 
-# Contact form submission route
-@app.route('/submit_contact_form', methods=['POST'])
-def submit_contact_form():
-    name = request.form.get('name')
-    email = request.form.get('email')
-    message = request.form.get('message')
-    
-    # Process the contact form data (you can add your own logic here)
-    
-    return f'Thank you, {name}! Your email ({email}) with the message "{message}" has been submitted.'
+    # Capture visitor information for question submissions
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    visitor_info = {
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'ip_address': client_ip,
+        'user_agent': request.user_agent.string
+    }
+    all_visitors.append(visitor_info)
+
+    # Process the form data (you can add your own logic here)
+    if name and email and subject:
+        question_data = {
+            'timestamp': visitor_info['timestamp'],
+            'ip_address': visitor_info['ip_address'],
+            'user_agent': visitor_info['user_agent'],
+            'name': name,
+            'email': email,
+            'subject': subject
+        }
+        question_submissions.append(question_data)
+
+    return f'Thank you, {name}! Your email ({email}) regarding "{subject}" has been submitted.'
 
 # Admin login route
 @app.route('/admin/login', methods=['GET', 'POST'])
@@ -65,7 +74,7 @@ def admin_dashboard():
     if not is_admin():
         return redirect(url_for('admin_login'))
 
-    return render_template('admin_dashboard.html', visitors=visitors)
+    return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions)
 
 # Admin logout route
 @app.route('/admin/logout')

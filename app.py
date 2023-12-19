@@ -92,5 +92,11 @@ def admin_logout():
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.DEBUG)
 
+# Products route
+@app.route('/products')
+def products():
+    # Your products page logic goes here
+    return render_template('products.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

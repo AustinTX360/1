@@ -26,7 +26,7 @@ app.config['SQLALCHEMY_BINDS'] = {
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server&login_timeout=30"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour (in seconds)
-db = SQLAlchemy(app)
+#db = SQLAlchemy(app)
 db.init_app(app)
 
 # Initialize Flask-Login

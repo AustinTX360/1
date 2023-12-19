@@ -22,7 +22,7 @@ app.config['SQLALCHEMY_BINDS'] = {
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-db.init_app(app)
+#db.init_app(app)
 
 
 # Data structures to store visitor information

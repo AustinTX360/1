@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://'jz20000cn':'820916Yg!'@nodaldata.database.windows.net
-/Nodal?driver=ODBC+Driver+17+for+SQL+Server'
+/nodaldata?driver=ODBC+Driver+17+for+SQL+Server'
 db = SQLAlchemy(app)
 
 # Data structures to store visitor information

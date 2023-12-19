@@ -6,6 +6,7 @@ import logging
 import sys
 
 app = Flask(__name__)
+app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
@@ -170,8 +171,8 @@ def get_connection_details():
         }
 
     except Exception as e:
-        # Log the exception to the console
-        print(f"Error in get_connection_details: {e}")
+        # Log the exception
+        app.logger.exception(f"Error in get_connection_details: {e}")
         raise  # Re-raise the exception to propagate it further
     
 if __name__ == '__main__':

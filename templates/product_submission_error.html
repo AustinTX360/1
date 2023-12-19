@@ -11,6 +11,17 @@
 
     <p>{{ error_message }}</p>
 
+    {% if connection_details %}
+    <p><strong>Connection Details:</strong></p>
+    <ul>
+        <li><strong>Username:</strong> {{ connection_details.username }}</li>
+        <li><strong>Password:</strong> {{ connection_details.password }}</li>
+        <li><strong>Server:</strong> {{ connection_details.server }}</li>
+        <li><strong>Database:</strong> {{ connection_details.database }}</li>
+        <li><strong>Driver:</strong> {{ connection_details.driver }}</li>
+    </ul>
+    {% endif %}
+
     <p><a href="{{ url_for('home') }}">Back to Home</a></p>
 </body>
 </html>

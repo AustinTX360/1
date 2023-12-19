@@ -89,12 +89,17 @@ def admin_login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        user = next((user for user in users.values() if user.username == username and user.password == password), None)
-        if user and user.role == 'admin':
+
+        # Check if provided credentials match the admin credentials
+        if username in admins and admins[username] == password:
+            # Create a simple user object for login
+            user = User(1, username, password, 'admin')
             login_user(user)
             session.permanent = True  # Set the session to be permanent
             return redirect(url_for('admin_dashboard'))
+
     return render_template('admin_login.html')
+
 
 # Admin dashboard route
 @app.route('/admin/dashboard')

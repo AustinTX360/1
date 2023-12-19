@@ -202,11 +202,10 @@ def get_connection_details():
     return connection_details
 
 
-
+@app.errorhandler(500)
+def internal_server_error(e):
+    app.logger.exception("Internal Server Error:")
+    return f"Internal Server Error: {str(e)}", 500
     
 if __name__ == '__main__':
     app.run(debug=True)
-
-@app.errorhandler(500)
-def internal_server_error(e):
-    return f"Internal Server Error: {str(e)}", 500

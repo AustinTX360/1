@@ -27,7 +27,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@noda
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour (in seconds)
 db = SQLAlchemy(app)
-#db.init_app(app)
+db.init_app(app)
 
 # Initialize Flask-Login
 login_manager = LoginManager(app)

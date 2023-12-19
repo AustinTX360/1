@@ -7,12 +7,11 @@ import sys
 from models import db, Product
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+app = Flask(__name__)
 # Add the following lines to configure logging to print debug messages
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.DEBUG)
 
-app = Flask(__name__)
-app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
 #app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server"

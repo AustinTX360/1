@@ -7,7 +7,6 @@ import sys
 from models import db, Product
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
-
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
@@ -31,6 +30,14 @@ db = SQLAlchemy(app)
 # Data structures to store visitor information
 all_visitors = []
 question_submissions = []
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.Text, nullable=False)
+    energy_usage = db.Column(db.Float, nullable=False)
+    num_cars = db.Column(db.Integer, nullable=False)
+    energy_storage = db.Column(db.Float, nullable=False)
 
 # Function to check if the user is logged in as an admin
 def is_admin():
@@ -122,13 +129,7 @@ def products():
     # Your products page logic goes here
     return render_template('products.html')
 
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    address = db.Column(db.Text, nullable=False)
-    energy_usage = db.Column(db.Float, nullable=False)
-    num_cars = db.Column(db.Integer, nullable=False)
-    energy_storage = db.Column(db.Float, nullable=False)
+
 
 # Products form submission route
 @app.route('/submit_product_form', methods=['POST'])

@@ -98,5 +98,20 @@ def products():
     # Your products page logic goes here
     return render_template('products.html')
 
+# Products form submission route
+@app.route('/submit_product_form', methods=['POST'])
+def submit_product_form():
+    name = request.form.get('name')
+    address = request.form.get('address')
+    energy_usage = request.form.get('energy_usage')
+    num_cars = request.form.get('num_cars')
+    energy_storage = request.form.get('energy_storage')
+
+    # Process the form data (you can add your own logic here)
+    # For example, you can store the data in a database or perform calculations
+
+    return render_template('product_submission_success.html', name=name)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

@@ -47,8 +47,7 @@ login_manager = LoginManager(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return users.get(int(user_id))
-
+    return User.query.get(int(user_id))
 
 # Data structures to store visitor information
 all_visitors = []

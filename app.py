@@ -17,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_NAME'] = 'Nodal'
 app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+17+for+SQL+Server'
 
 app.config['SQLALCHEMY_BINDS'] = {
-    'your_database': "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+    None: "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
 }
 db = SQLAlchemy(app)
 

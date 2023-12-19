@@ -15,6 +15,9 @@ app.config['SQLALCHEMY_DATABASE_PASSWORD'] = '820916Yg!'
 app.config['SQLALCHEMY_DATABASE_SERVER'] = 'nodaldata.database.windows.net'
 app.config['SQLALCHEMY_DATABASE_NAME'] = 'Nodal'
 app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+17+for+SQL+Server'
+app.config['SQLALCHEMY_BINDS'] = {
+    'Nodal': "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+}
 db = SQLAlchemy(app)
 
 # Data structures to store visitor information
@@ -157,7 +160,6 @@ def get_connection_details():
     }
 
     return connection_details
-
     
 if __name__ == '__main__':
     app.run(debug=True)

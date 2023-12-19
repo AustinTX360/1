@@ -145,6 +145,9 @@ def get_connection_details():
     """
     connection_string = app.config.get('SQLALCHEMY_DATABASE_URI', '')
 
+    # Log the raw connection string
+    app.logger.debug(f"Raw Connection String: {connection_string}")
+
     # Initialize connection details
     connection_details = {
         'username': None,
@@ -155,16 +158,15 @@ def get_connection_details():
     }
 
     try:
-        # Extract connection details using SQLAlchemy
-        engine = create_engine(connection_string)
-        url = engine.url
+        # Parse connection string
+        parsed_url = urlparse(connection_string)
 
         # Update connection details
-        connection_details['username'] = url.username
-        connection_details['password'] = url.password
-        connection_details['server'] = url.host
-        connection_details['database'] = url.database
-        connection_details['driver'] = url.drivername
+        connection_details['username'] = parsed_url.username
+        connection_details['password'] = parsed_url.password
+        connection_details['server'] = parsed_url.hostname
+        connection_details['database'] = parsed_url.path.strip('/')
+        connection_details['driver'] = parsed_url.scheme
 
     except Exception as e:
         # Log the exception

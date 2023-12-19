@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import logging
 import sys
@@ -6,6 +7,8 @@ import sys
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mssql+pyodbc://username:password@your_server_name/database_name?driver=ODBC+Driver+17+for+SQL+Server'
+db = SQLAlchemy(app)
 
 # Data structures to store visitor information
 all_visitors = []
@@ -98,19 +101,30 @@ def products():
     # Your products page logic goes here
     return render_template('products.html')
 
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    address = db.Column(db.Text, nullable=False)
+    energy_usage = db.Column(db.Float, nullable=False)
+    num_cars = db.Column(db.Integer, nullable=False)
+    energy_storage = db.Column(db.Float, nullable=False)
+    
 # Products form submission route
 @app.route('/submit_product_form', methods=['POST'])
 def submit_product_form():
     name = request.form.get('name')
     address = request.form.get('address')
-    energy_usage = request.form.get('energy_usage')
-    num_cars = request.form.get('num_cars')
-    energy_storage = request.form.get('energy_storage')
+    energy_usage = float(request.form.get('energy_usage'))
+    num_cars = int(request.form.get('num_cars'))
+    energy_storage = float(request.form.get('energy_storage'))
 
-    # Process the form data (you can add your own logic here)
-    # For example, you can store the data in a database or perform calculations
+    # Save the product to the database
+    new_product = Product(name=name, address=address, energy_usage=energy_usage, num_cars=num_cars, energy_storage=energy_storage)
+    db.session.add(new_product)
+    db.session.commit()
 
     return render_template('product_submission_success.html', name=name)
+
 
 
 if __name__ == '__main__':

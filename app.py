@@ -29,6 +29,26 @@ app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour (in seconds)
 db = SQLAlchemy(app)
 #db.init_app(app)
 
+# Initialize Flask-Login
+login_manager = LoginManager(app)
+
+# Mock user class for demonstration purposes
+class User(UserMixin):
+    def __init__(self, user_id, username, password, role):
+        self.id = user_id
+        self.username = username
+        self.password = password
+        self.role = role
+
+# Mock user database for demonstration purposes
+users = {
+    1: User(1, 'admin', 'admin_password', 'admin'),
+}
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(int(user_id))
+
 
 # Data structures to store visitor information
 all_visitors = []
@@ -130,9 +150,6 @@ def logout():
     logout_user()
     return redirect(url_for('admin_login'))
 
-# Enable logging to the console
-app.logger.addHandler(logging.StreamHandler(sys.stdout))
-app.logger.setLevel(logging.DEBUG)
 
 # Products route
 @app.route('/products')
@@ -183,26 +200,6 @@ def get_connection_details():
     }
 
     return connection_details
-
-# Initialize Flask-Login
-login_manager = LoginManager(app)
-
-# Mock user class for demonstration purposes
-class User(UserMixin):
-    def __init__(self, user_id, username, password, role):
-        self.id = user_id
-        self.username = username
-        self.password = password
-        self.role = role
-
-# Mock user database for demonstration purposes
-users = {
-    1: User(1, 'admin', 'admin_password', 'admin'),
-}
-
-@login_manager.user_loader
-def load_user(user_id):
-    return users.get(int(user_id))
 
 
 

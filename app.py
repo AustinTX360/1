@@ -7,6 +7,10 @@ import sys
 from models import db, Product
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+# Add the following lines to configure logging to print debug messages
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.DEBUG)
+
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
@@ -83,7 +87,7 @@ def submit_form():
 
     return f'Thank you, {name}! Your email ({email}) regarding "{subject}" has been submitted.'
 
-# Admin login route
+# Update the 'admin_login' route
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     try:
@@ -95,12 +99,15 @@ def admin_login():
 
             # Check if provided credentials match the admin credentials
             if username in admins and admins[username] == password:
+                app.logger.debug(f"Login successful for {username}")
+
                 # Create a simple user object for login
                 user = User(1, username, password, 'admin')
                 login_user(user)
                 session.permanent = True  # Set the session to be permanent
                 return redirect(url_for('admin_dashboard'))
 
+        app.logger.debug("Rendering admin login page")
         return render_template('admin_login.html')
 
     except Exception as e:

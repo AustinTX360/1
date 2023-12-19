@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import logging
 import sys
+from models import db, Product
 
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
@@ -15,11 +16,14 @@ app.config['SQLALCHEMY_DATABASE_PASSWORD'] = '820916Yg!'
 app.config['SQLALCHEMY_DATABASE_SERVER'] = 'nodaldata.database.windows.net'
 app.config['SQLALCHEMY_DATABASE_NAME'] = 'Nodal'
 app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+18+for+SQL+Server'
-
 app.config['SQLALCHEMY_BINDS'] = {
     None: "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server&login_timeout=30"
 }
+app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+db.init_app(app)
+
 
 # Data structures to store visitor information
 all_visitors = []
@@ -93,8 +97,8 @@ def admin_login():
 def admin_dashboard():
     if not is_admin():
         return redirect(url_for('admin_login'))
-
-    return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions)
+    products = Product.query.all()
+    return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions, products=products)
 
 # Admin logout route
 @app.route('/admin/logout')

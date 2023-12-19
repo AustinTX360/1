@@ -130,11 +130,40 @@ def submit_product_form():
     except SQLAlchemyError as e:
         db.session.rollback()  # Rollback changes to avoid leaving the database in an inconsistent state
         error_message = f"Database error: {str(e)}"
-        return render_template('product_submission_error.html', error_message=error_message)
+
+        # Extract additional information from the connection string
+        connection_info = app.config.get('SQLALCHEMY_DATABASE_URI', '')
+        connection_details = parse_connection_string(connection_info)
+
+        return render_template('product_submission_error.html', error_message=error_message, connection_details=connection_details)
 
     except Exception as e:
         error_message = f"An unexpected error occurred: {str(e)}"
         return render_template('product_submission_error.html', error_message=error_message)
 
+
+def parse_connection_string(connection_string):
+    """
+    Parse the connection string and extract relevant information.
+    """
+    info = {}
+    if connection_string:
+        # Split the connection string into parts
+        parts = connection_string.split('@')
+
+        # Extract username and password
+        user_pass = parts[0].replace('//', '').split(':')
+        info['username'] = user_pass[0]
+        info['password'] = user_pass[1]
+
+        # Extract server and database
+        server_db = parts[1].split('/')
+        info['server'] = server_db[0]
+        info['database'] = server_db[1]
+
+        # Extract driver information
+        info['driver'] = parts[2]
+
+    return info
 if __name__ == '__main__':
     app.run(debug=True)

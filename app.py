@@ -144,29 +144,35 @@ def get_connection_details():
     """
     connection_string = app.config.get('SQLALCHEMY_DATABASE_URI', '')
 
-    # Split the connection string into parts
-    parts = connection_string.split('@')
+    try:
+        # Split the connection string into parts
+        parts = connection_string.split('@')
 
-    # Extract username and password
-    user_pass = parts[0].replace('//', '').split(':')
-    username = user_pass[0]
-    password = user_pass[1]
+        # Extract username and password
+        user_pass = parts[0].replace('//', '').split(':')
+        username = user_pass[0]
+        password = user_pass[1]
 
-    # Extract server and database
-    server_db = parts[1].split('/')
-    server = server_db[0]
-    database = server_db[1]
+        # Extract server and database
+        server_db = parts[1].split('/')
+        server = server_db[0]
+        database = server_db[1]
 
-    # Extract driver information
-    driver = parts[2]
+        # Extract driver information
+        driver = parts[2]
 
-    return {
-        'username': username,
-        'password': password,
-        'server': server,
-        'database': database,
-        'driver': driver,
-    }
+        return {
+            'username': username,
+            'password': password,
+            'server': server,
+            'database': database,
+            'driver': driver,
+        }
+
+    except Exception as e:
+        # Log the exception to the console
+        print(f"Error in get_connection_details: {e}")
+        raise  # Re-raise the exception to propagate it further
     
 if __name__ == '__main__':
     app.run(debug=True)

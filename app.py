@@ -9,15 +9,15 @@ app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
-#app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server"
 app.config['SQLALCHEMY_DATABASE_USERNAME'] = 'jz20000cn'
 app.config['SQLALCHEMY_DATABASE_PASSWORD'] = '820916Yg!'
 app.config['SQLALCHEMY_DATABASE_SERVER'] = 'nodaldata.database.windows.net'
 app.config['SQLALCHEMY_DATABASE_NAME'] = 'Nodal'
-app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+17+for+SQL+Server'
+app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+18+for+SQL+Server'
 
 app.config['SQLALCHEMY_BINDS'] = {
-    None: "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+    None: "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server&login_timeout=30"
 }
 db = SQLAlchemy(app)
 

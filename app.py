@@ -145,10 +145,32 @@ def get_connection_details():
     """
     connection_string = app.config.get('SQLALCHEMY_DATABASE_URI', '')
 
-    # Log the connection string
-    app.logger.debug(f"Connection String: {connection_string}")
+    # Initialize connection details
+    connection_details = {
+        'username': None,
+        'password': None,
+        'server': None,
+        'database': None,
+        'driver': None,
+    }
 
-    return {'connection_string': connection_string}
+    try:
+        # Extract connection details using SQLAlchemy
+        engine = create_engine(connection_string)
+        url = engine.url
+
+        # Update connection details
+        connection_details['username'] = url.username
+        connection_details['password'] = url.password
+        connection_details['server'] = url.host
+        connection_details['database'] = url.database
+        connection_details['driver'] = url.drivername
+
+    except Exception as e:
+        # Log the exception
+        app.logger.exception(f"Error in get_connection_details: {e}")
+
+    return connection_details
     
 if __name__ == '__main__':
     app.run(debug=True)

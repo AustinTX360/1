@@ -5,6 +5,8 @@ from datetime import datetime
 import logging
 import sys
 from models import db, Product
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+
 
 app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
@@ -19,8 +21,9 @@ app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+18+for+SQL+Server'
 app.config['SQLALCHEMY_BINDS'] = {
     None: "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server&login_timeout=30"
 }
-app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:820916Yg!@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+18+for+SQL+Server&login_timeout=30"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour (in seconds)
 db = SQLAlchemy(app)
 #db.init_app(app)
 
@@ -82,13 +85,15 @@ def submit_form():
     return f'Thank you, {name}! Your email ({email}) regarding "{subject}" has been submitted.'
 
 # Admin login route
-@app.route('/admin/login', methods=['GET', 'POST'])
+@app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        if username in admins and admins[username] == password:
-            session['username'] = username
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = next((user for user in users.values() if user.username == username and user.password == password), None)
+        if user and user.role == 'admin':
+            login_user(user)
+            session.permanent = True  # Set the session to be permanent
             return redirect(url_for('admin_dashboard'))
     return render_template('admin_login.html')
 
@@ -101,10 +106,11 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions, products=products)
 
 # Admin logout route
-@app.route('/admin/logout')
-def admin_logout():
-    session.pop('username', None)
-    return redirect(url_for('home'))
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('admin_login'))
 
 # Enable logging to the console
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -165,6 +171,26 @@ def get_connection_details():
     }
 
     return connection_details
+
+# Mock user class for demonstration purposes
+class User(UserMixin):
+    def __init__(self, user_id, username, password, role):
+        self.id = user_id
+        self.username = username
+        self.password = password
+        self.role = role
+
+# Mock user database for demonstration purposes
+users = {
+    1: User(1, 'admin', 'admin_password', 'admin'),
+}
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(int(user_id))
+
+
+
     
 if __name__ == '__main__':
     app.run(debug=True)

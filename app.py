@@ -143,7 +143,18 @@ def get_connection_details():
     Get relevant information from the connection string.
     """
     connection_string = app.config.get('SQLALCHEMY_DATABASE_URI', '')
-    return {'connection_string': connection_string}
+
+    # Parse the connection string using SQLAlchemy utilities
+    engine = create_engine(connection_string)
+    username, password, host, database, driver = parse_as_odbc(engine)
+
+    return {
+        'username': username,
+        'password': password,
+        'server': host,
+        'database': database,
+        'driver': driver,
+    }
     
 if __name__ == '__main__':
     app.run(debug=True)

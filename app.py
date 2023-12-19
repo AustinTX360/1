@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 import logging
 import sys
@@ -108,24 +109,32 @@ class Product(db.Model):
     energy_usage = db.Column(db.Float, nullable=False)
     num_cars = db.Column(db.Integer, nullable=False)
     energy_storage = db.Column(db.Float, nullable=False)
-    
+
 # Products form submission route
 @app.route('/submit_product_form', methods=['POST'])
 def submit_product_form():
-    name = request.form.get('name')
-    address = request.form.get('address')
-    energy_usage = float(request.form.get('energy_usage'))
-    num_cars = int(request.form.get('num_cars'))
-    energy_storage = float(request.form.get('energy_storage'))
+    try:
+        name = request.form.get('name')
+        address = request.form.get('address')
+        energy_usage = float(request.form.get('energy_usage'))
+        num_cars = int(request.form.get('num_cars'))
+        energy_storage = float(request.form.get('energy_storage'))
 
-    # Save the product to the database
-    new_product = Product(name=name, address=address, energy_usage=energy_usage, num_cars=num_cars, energy_storage=energy_storage)
-    db.session.add(new_product)
-    db.session.commit()
+        # Save the product to the database
+        new_product = Product(name=name, address=address, energy_usage=energy_usage, num_cars=num_cars, energy_storage=energy_storage)
+        db.session.add(new_product)
+        db.session.commit()
 
-    return render_template('product_submission_success.html', name=name)
+        return render_template('product_submission_success.html', name=name)
 
+    except SQLAlchemyError as e:
+        db.session.rollback()  # Rollback changes to avoid leaving the database in an inconsistent state
+        error_message = f"Database error: {str(e)}"
+        return render_template('product_submission_error.html', error_message=error_message)
 
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {str(e)}"
+        return render_template('product_submission_error.html', error_message=error_message)
 
 if __name__ == '__main__':
     app.run(debug=True)

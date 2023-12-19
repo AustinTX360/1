@@ -86,21 +86,27 @@ def submit_form():
 # Admin login route
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
+    try:
+        if request.method == 'POST':
+            username = request.form.get('username')
+            password = request.form.get('password')
 
-        app.logger.debug(f"Attempting to log in as {username} with password {password}")
+            app.logger.debug(f"Attempting to log in as {username}")
 
-        # Check if provided credentials match the admin credentials
-        if username in admins and admins[username] == password:
-            # Create a simple user object for login
-            user = User(1, username, password, 'admin')
-            login_user(user)
-            session.permanent = True  # Set the session to be permanent
-            return redirect(url_for('admin_dashboard'))
+            # Check if provided credentials match the admin credentials
+            if username in admins and admins[username] == password:
+                # Create a simple user object for login
+                user = User(1, username, password, 'admin')
+                login_user(user)
+                session.permanent = True  # Set the session to be permanent
+                return redirect(url_for('admin_dashboard'))
 
-    return render_template('admin_login.html')
+        return render_template('admin_login.html')
+
+    except Exception as e:
+        # Log the exception details
+        app.logger.exception("Error during admin login:")
+        return f"An error occurred during admin login: {str(e)}", 500
 
 
 # Admin dashboard route

@@ -9,7 +9,12 @@ app = Flask(__name__)
 app.logger.setLevel(logging.DEBUG)
 app.secret_key = 'your_secret_key'  # Change this to a secure, random key in a production environment
 admins = {'admin': 'admin_password'}  # Add your admin credentials here
-app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc://jz20000cn:'820916Yg!'@nodaldata.database.windows.net/Nodal?driver=ODBC+Driver+17+for+SQL+Server"
+app.config['SQLALCHEMY_DATABASE_USERNAME'] = 'jz20000cn'
+app.config['SQLALCHEMY_DATABASE_PASSWORD'] = '820916Yg!'
+app.config['SQLALCHEMY_DATABASE_SERVER'] = 'nodaldata.database.windows.net'
+app.config['SQLALCHEMY_DATABASE_NAME'] = 'Nodal'
+app.config['SQLALCHEMY_DATABASE_DRIVER'] = 'ODBC+Driver+17+for+SQL+Server'
 db = SQLAlchemy(app)
 
 # Data structures to store visitor information
@@ -141,38 +146,18 @@ def submit_product_form():
 
 def get_connection_details():
     """
-    Get relevant information from the connection string.
+    Get relevant information from the configuration.
     """
-    connection_string = app.config.get('SQLALCHEMY_DATABASE_URI', '')
-
-    # Log the raw connection string
-    app.logger.debug(f"Raw Connection String: {connection_string}")
-
-    # Initialize connection details
     connection_details = {
-        'username': None,
-        'password': None,
-        'server': None,
-        'database': None,
-        'driver': None,
+        'username': app.config.get('SQLALCHEMY_DATABASE_USERNAME'),
+        'password': app.config.get('SQLALCHEMY_DATABASE_PASSWORD'),
+        'server': app.config.get('SQLALCHEMY_DATABASE_SERVER'),
+        'database': app.config.get('SQLALCHEMY_DATABASE_NAME'),
+        'driver': app.config.get('SQLALCHEMY_DATABASE_DRIVER'),
     }
 
-    try:
-        # Parse connection string
-        parsed_url = urlparse(connection_string)
-
-        # Update connection details
-        connection_details['username'] = parsed_url.username
-        connection_details['password'] = parsed_url.password
-        connection_details['server'] = parsed_url.hostname
-        connection_details['database'] = parsed_url.path.strip('/')
-        connection_details['driver'] = parsed_url.scheme
-
-    except Exception as e:
-        # Log the exception
-        app.logger.exception(f"Error in get_connection_details: {e}")
-
     return connection_details
+
     
 if __name__ == '__main__':
     app.run(debug=True)

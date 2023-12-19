@@ -90,6 +90,8 @@ def admin_login():
         username = request.form.get('username')
         password = request.form.get('password')
 
+        app.logger.debug(f"Attempting to log in as {username} with password {password}")
+
         # Check if provided credentials match the admin credentials
         if username in admins and admins[username] == password:
             # Create a simple user object for login

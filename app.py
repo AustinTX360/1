@@ -33,17 +33,17 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
 # Mock user class for demonstration purposes
-class User(UserMixin):
-    def __init__(self, user_id, username, password, role):
-        self.id = user_id
-        self.username = username
-        self.password = password
-        self.role = role
+#class User(UserMixin):
+   # def __init__(self, user_id, username, password, role):
+   #     self.id = user_id
+    #    self.username = username
+    #    self.password = password
+     #   self.role = role
 
 # Mock user database for demonstration purposes
-users = {
-    1: User(1, 'admin', 'admin_password', 'admin'),
-}
+#users = {
+ #   1: User(1, 'admin', 'admin_password', 'admin'),
+#}
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -120,11 +120,13 @@ def admin_login():
             if username in admins and admins[username] == password:
                 app.logger.debug(f"Login successful for {username}")
 
-                # Create a simple user object for login
-                user = User(1, username, password, 'admin')
-                login_user(user)
-                session.permanent = True  # Set the session to be permanent
-                return redirect(url_for('admin_dashboard'))
+                # Load the user from the User model
+                user = User.query.filter_by(username=username, password=password).first()
+
+                if user:
+                    login_user(user)
+                    session.permanent = True  # Set the session to be permanent
+                    return redirect(url_for('admin_dashboard'))
 
         app.logger.debug("Rendering admin login page")
         return render_template('admin_login.html')

@@ -156,8 +156,6 @@ def admin_login():
         return f"An error occurred during admin login: {str(e)}", 500
 
 
-
-
 # Admin dashboard route
 @app.route('/admin/dashboard')
 def admin_dashboard():

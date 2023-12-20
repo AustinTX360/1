@@ -167,14 +167,11 @@ def admin_dashboard():
         # Log the exception details for debugging
         app.logger.exception("Error in admin_dashboard route:")
         return f"An error occurred: {str(e)}", 500
-
-# Admin logout route
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
+        
+@app.route('/admin/logout')
+def admin_logout():
+    # Add any necessary logout logic here
     return redirect(url_for('admin_login'))
-
 
 # Products route
 @app.route('/products')

@@ -9,7 +9,93 @@
 <body>
     <div class="container mt-5">
         <h1 class="display-4">Admin Dashboard</h1>
-        <p>Welcome, {{ session['username'] }}!</p>
+        <p>Welcome, {{ session.get('username', 'Guest') }}!</p>
+
+        <h2>All Visitors</h2>
+        {% if all_visitors %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>IP Address</th>
+                        <th>User Agent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for visitor in all_visitors %}
+                        <tr>
+                            <td>{{ visitor.get('timestamp', 'N/A') }}</td>
+                            <td>{{ visitor.get('ip_address', 'N/A') }}</td>
+                            <td>{{ visitor.get('user_agent', 'N/A') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No visitor data available.</p>
+        {% endif %}
+
+        <h2>Question Submissions</h2>
+        {% if question_submissions %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>IP Address</th>
+                        <th>User Agent</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in question_submissions %}
+                        <tr>
+                            <td>{{ submission.get('timestamp', 'N/A') }}</td>
+                            <td>{{ submission.get('ip_address', 'N/A') }}</td>
+                            <td>{{ submission.get('user_agent', 'N/A') }}</td>
+                            <td>{{ submission.get('name', 'N/A') }}</td>
+                            <td>{{ submission.get('email', 'N/A') }}</td>
+                            <td>{{ submission.get('subject', 'N/A') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No question submissions available.</p>
+        {% endif %}
+
+        <h2>Submitted Product</h2>
+        {% if products %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Energy Usage</th>
+                        <th>Number of Cars</th>
+                        <th>Energy Storage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.get('id', 'N/A') }}</td>
+                            <td>{{ product.get('name', 'N/A') }}</td>
+                            <td>{{ product.get('address', 'N/A') }}</td>
+                            <td>{{ product.get('energy_usage', 'N/A') }}</td>
+                            <td>{{ product.get('num_cars', 'N/A') }}</td>
+                            <td>{{ product.get('energy_storage', 'N/A') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No product data available.</p>
+        {% endif %}
+
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">Logout</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

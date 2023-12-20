@@ -161,7 +161,8 @@ def admin_dashboard():
         if not is_admin():
             return redirect(url_for('admin_login'))
 
-        return render_template('admin_dashboard.html')
+        # Pass visitor and question data to the template
+        return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions)
 
     except Exception as e:
         # Log the exception details for debugging

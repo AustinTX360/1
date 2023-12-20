@@ -130,6 +130,8 @@ def admin_login():
 
                 return redirect(url_for('admin_dashboard'))
 
+            app.logger.debug(f"Login failed for {username}")
+
         app.logger.debug("Rendering admin login page")
         return render_template('admin_login.html')
 

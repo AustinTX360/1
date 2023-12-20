@@ -129,6 +129,12 @@ def admin_login():
                 session['username'] = username
                 session['is_admin'] = True
 
+                app.logger.debug(f"Session information: {session}")
+
+                # For additional debugging, print the headers and form data
+                app.logger.debug(f"Request headers: {request.headers}")
+                app.logger.debug(f"Form data: {request.form}")
+
                 return redirect(url_for('admin_dashboard'))
 
             app.logger.debug(f"Login failed for {username}")
@@ -140,6 +146,7 @@ def admin_login():
         # Log the exception details
         app.logger.exception("Error during admin login:")
         return f"An error occurred during admin login: {str(e)}", 500
+
 
 
 

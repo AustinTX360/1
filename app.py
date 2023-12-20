@@ -32,6 +32,7 @@ db.init_app(app)
 # Initialize Flask-Login
 login_manager = LoginManager(app)
 
+
 # Mock user class for demonstration purposes
 #class User(UserMixin):
    # def __init__(self, user_id, username, password, role):

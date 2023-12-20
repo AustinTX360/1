@@ -155,11 +155,13 @@ def admin_login():
         return f"An error occurred during admin login: {str(e)}", 500
 
 
-# Admin dashboard route
 @app.route('/admin/dashboard')
 def admin_dashboard():
     if not is_admin():
         return redirect(url_for('admin_login'))
+
+    app.logger.debug(f"Session information: {session}")
+
     products = Product.query.all()
     return render_template('admin_dashboard.html', all_visitors=all_visitors, question_submissions=question_submissions, products=products)
 

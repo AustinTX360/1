@@ -60,8 +60,32 @@
 </table>
 
 
-        <h2>Submitted Product</h2>
-        <p>Static content for testing</p>
+<!-- Add this section to display products -->
+<h2>Products</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Energy Usage</th>
+            <th>Number of Cars</th>
+            <th>Energy Storage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.address }}</td>
+                <td>{{ product.energy_usage }}</td>
+                <td>{{ product.num_cars }}</td>
+                <td>{{ product.energy_storage }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
         <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">Logout</a>
     </div>

@@ -105,6 +105,11 @@ def submit_form():
 
     return f'Thank you, {name}! Your email ({email}) regarding "{subject}" has been submitted.'
 
+# Mock admin credentials (temporary)
+admins = {'admin': 'admin_password'}
+
+# ... (other routes and configurations)
+
 # Update the 'admin_login' route
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
@@ -119,13 +124,11 @@ def admin_login():
             if username in admins and admins[username] == password:
                 app.logger.debug(f"Login successful for {username}")
 
-                # Load the user from the User model
-                user = User.query.filter_by(username=username, password=password).first()
+                # Store admin information in the session
+                session['username'] = username
+                session['is_admin'] = True
 
-                if user:
-                    login_user(user)
-                    session.permanent = True  # Set the session to be permanent
-                    return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('admin_dashboard'))
 
         app.logger.debug("Rendering admin login page")
         return render_template('admin_login.html')
@@ -134,6 +137,7 @@ def admin_login():
         # Log the exception details
         app.logger.exception("Error during admin login:")
         return f"An error occurred during admin login: {str(e)}", 500
+
 
 
 # Admin dashboard route

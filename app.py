@@ -117,12 +117,11 @@ def submit_form():
 # Mock admin credentials (temporary)
 admins = {'admin': 'admin_password'}
 
-# ... (other routes and configurations)
-
-# Update the 'admin_login' route
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     try:
+        app.logger.debug("Admin login route reached.")
+
         if request.method == 'POST':
             username = request.form.get('username')
             password = request.form.get('password')
